@@ -1,6 +1,5 @@
-playing_field = [[None, None, None],
-                 [None, None, None],
-                 [None, None, None]]
+import time
+import sys
 
 def detect_win(field):
     for i, arr in enumerate(field):
@@ -18,22 +17,31 @@ def detect_win(field):
             return False
     return None
 
-starting_pos_value = [[None, None, None],
-                      [None, None, None],
-                      [None, None, None]]
+starting_pos_value = [[0, 0, 0],
+                      [0, 0, 0],
+                      [0, 0, 0]]
 
-def brute_force(playing_field, starting_pos):
+def eval_pos(playing_field, starting_pos):
     playing_field[starting_pos[0]][starting_pos[1]] = 1
     for arr in playing_field:
         for i, value in enumerate(arr):
-            if value == None and sum(playing_field)/len(playing_field) > 0:
+            if value == 0 and sum([sum(x) for x in playing_field]) <= 0:
                 arr[i] = 1
-            elif value == None and sum(playing_field)/len(playing_field) <= 0:
-                arr[i] = 0
+            elif value == 0 and sum([sum(x) for x in playing_field]) > 0:
+                arr[i] = -1
 
             if detect_win(playing_field) == None:
-                bruteforce(playing_field)
+                eval_pos(playing_field, starting_pos)
             else:
-                starting_pos_value[starting_pos[0]][starting_pos[1]] += detect_win(playin_field)
+                starting_pos_value[starting_pos[0]][starting_pos[1]] += 1*detect_win(playing_field)
+                break
 
-brute_force(playing_field, [0, 0])
+for i in range(3):
+    for j in range(3):
+        playing_field = [[0, 0, 0],
+                         [0, 0, 0],
+                         [0, 0, 0]]
+        eval_pos(playing_field, [i, j])
+        time.sleep(1)
+
+print(starting_pos_value)
